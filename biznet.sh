@@ -29,7 +29,7 @@ fi
 fetch_new_token() {
     echo "Logging in to get a new token..."
     login_response=$(curl -s -X POST "$login_url" -H "Content-Type: application/json" --data "$login_payload")
-    echo "Login response: $login_response"
+    echo "Login successful, response: $login_response"
 
     # Extract token from the response
     token=$(echo "$login_response" | jq -r '.["api-token"]')
@@ -42,6 +42,13 @@ fetch_new_token() {
     # Store the token in a file
     echo "$token" > "$token_file"
     echo "New token saved: $token"
+}
+
+# Function to handle missing valid_until field by refreshing the token
+handle_missing_quota_or_bandwidth_data() {
+    echo "Warning: quota or bandwidth data is broken or missing. Removing token and generating a new one."
+    rm -f "$token_file"
+    fetch_new_token
 }
 
 # Function to make the quota request with retry logic
@@ -64,8 +71,7 @@ fetch_quota_data() {
             break
         elif [[ "$response_code" =~ ^(000|500|502|503|524)$ || "$response1_code" =~ ^(000|500|502|503|524)$ ]]; then
             echo "Error: Failed to retrieve quota or bandwidth data. HTTP status: $response_code, $response1_code"
-            fetch_new_token
-            token=$(cat "$token_file")
+            handle_missing_quota_or_bandwidth_data
         else
             echo "Unrecoverable error. HTTP status: $response_code, $response1_code"
             exit 1
@@ -93,8 +99,7 @@ fetch_quota_data() {
 
     # Handle valid_until properly (with fallback to current date)
     if [ "$valid_until" == "0" ] || [ -z "$valid_until" ]; then
-        echo "Warning: valid_until field is null or missing. Setting to 0."
-        valid_until_timestamp=0
+        handle_missing_quota_or_bandwidth_data
     else
         valid_until_timestamp=$(date -d "$valid_until" +%s)
     fi
