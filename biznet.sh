@@ -3,7 +3,7 @@
 # API URLs
 login_url="https://mybiznet.biznetform.com/api/login"
 request_url="https://mybiznet.biznetform.com/api/getQuota?contractNumber=000000xxxxxx"
-bandwith_url="https://mybiznet.biznetform.com/api/getBandwidth?contractNumber=000000xxxxxx"
+bandwidth_url="https://mybiznet.biznetform.com/api/getBandwidth?contractNumber=000000xxxxxx"
 
 # Login credentials
 username="xxxxxxxxxxxxxx"
@@ -62,7 +62,7 @@ fetch_quota_data() {
         response=$(curl -s -w "%{http_code}" -o /tmp/quota_response.json -X GET "$request_url" -H "Api-token: $token")
         response_code="${response: -3}"
         
-        response1=$(curl -s -w "%{http_code}" -o /tmp/bandwith_response.json -X GET "$bandwith_url" -H "Api-token: $token")
+        response1=$(curl -s -w "%{http_code}" -o /tmp/bandwidth_response.json -X GET "$bandwidth_url" -H "Api-token: $token")
         response1_code="${response1: -3}"
 
         # Check if both responses were successful
@@ -94,8 +94,8 @@ fetch_quota_data() {
     extra_remaining=$(jq -r '.extraKuota.remainingLimit // 0' /tmp/quota_response.json)
     extra_limit=$(jq -r '.extraKuota.limit // 0' /tmp/quota_response.json)
     valid_until=$(jq -r '.mainKuota.mainKuota.validUntil // 0' /tmp/quota_response.json)
-    plan_bandwidth=$(jq -r '.data.active.bandwidth // 0' /tmp/bandwith_response.json)
-    plan_uom=$(jq -r '.data.active.uom // "Mbps"' /tmp/bandwith_response.json)
+    plan_bandwidth=$(jq -r '.data.active.bandwidth // 0' /tmp/bandwidth_response.json)
+    plan_uom=$(jq -r '.data.active.uom // "Mbps"' /tmp/bandwidth_response.json)
 
     # Handle valid_until properly (with fallback to current date)
     if [ "$valid_until" == "0" ] || [ -z "$valid_until" ]; then
