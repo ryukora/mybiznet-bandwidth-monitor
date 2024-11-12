@@ -29,7 +29,7 @@ fi
 fetch_new_token() {
     echo "Logging in to get a new token..."
     login_response=$(curl -s -X POST "$login_url" -H "Content-Type: application/json" --data "$login_payload")
-    echo "Login successful, response: $login_response"
+    echo "Login response: $login_response"
 
     # Extract token from the response
     token=$(echo "$login_response" | jq -r '.["api-token"]')
