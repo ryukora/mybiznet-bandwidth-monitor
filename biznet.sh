@@ -49,26 +49,33 @@ fetch_quota_data() {
     token=$(cat "$token_file")
     attempts=0
     max_attempts=5
+    success=0
 
     while [ $attempts -lt $max_attempts ]; do
         response=$(curl -s -w "%{http_code}" -o /tmp/quota_response.json -X GET "$request_url" -H "Api-token: $token")
+        response_code="${response: -3}"
+        
         response1=$(curl -s -w "%{http_code}" -o /tmp/bandwith_response.json -X GET "$bandwith_url" -H "Api-token: $token")
+        response1_code="${response1: -3}"
 
-        if [ "$response" == "200" ]; then
+        # Check if both responses were successful
+        if [ "$response_code" == "200" ] && [ "$response1_code" == "200" ]; then
+            success=1
             break
-        elif [ "$response" == "503" ]; then
-            echo "Server unavailable, generating a new token..."
+        elif [[ "$response_code" =~ ^(000|500|502|503|524)$ || "$response1_code" =~ ^(000|500|502|503|524)$ ]]; then
+            echo "Error: Failed to retrieve quota or bandwidth data. HTTP status: $response_code, $response1_code"
             fetch_new_token
             token=$(cat "$token_file")
         else
-            echo "Error: Failed to retrieve quota data. HTTP status: $response"
+            echo "Unrecoverable error. HTTP status: $response_code, $response1_code"
             exit 1
         fi
 
         attempts=$((attempts + 1))
+        echo "Retrying... Attempt $attempts of $max_attempts"
     done
 
-    if [ "$attempts" -ge "$max_attempts" ]; then
+    if [ $success -eq 0 ]; then
         echo "Error: Exceeded maximum retry attempts."
         exit 1
     fi
