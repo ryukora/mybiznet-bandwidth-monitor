@@ -1,2 +1,5 @@
-# mybiznet-bandwith-prometheus
-gains data information / scraping from app mybiznet to grafana
+# MyBiznet Bandwith Prometheus
+Scraping data from app mybiznet to grafana
+
+how to?
+google.
