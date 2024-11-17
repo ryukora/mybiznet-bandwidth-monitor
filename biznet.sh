@@ -27,21 +27,39 @@ fi
 
 # Function to login and get a new token
 fetch_new_token() {
-    echo "Logging in to get a new token..."
-    login_response=$(curl -s -X POST "$login_url" -H "Content-Type: application/json" --data "$login_payload")
-    echo "Login response: $login_response"
+    attempts=0
+    max_attempts=5
+    success=0
 
-    # Extract token from the response
-    token=$(echo "$login_response" | jq -r '.["api-token"]')
+    while [ $attempts -lt $max_attempts ]; do
+        echo "Logging in to get a new token... Attempt $((attempts + 1)) of $max_attempts"
+        login_response=$(curl -s -X POST "$login_url" -H "Content-Type: application/json" --data "$login_payload")
+        echo "Login response: $login_response"
 
-    if [ -z "$token" ] || [ "$token" == "null" ]; then
-        echo "Error: Failed to retrieve API token. Response: $login_response"
+        # Check for a successful response and extract the token
+        response_code=$(echo "$login_response" | jq -r '.code')
+        response_success=$(echo "$login_response" | jq -r '.success')
+        token=$(echo "$login_response" | jq -r '.["api-token"]')
+
+        if [ "$response_code" -eq 200 ] && [ "$response_success" == "true" ] && [ -n "$token" ] && [ "$token" != "null" ]; then
+            # Store the token in a file
+            echo "$token" > "$token_file"
+            echo "New token saved: $token"
+            success=1
+            break
+        else
+            echo "Error: Failed to retrieve API token. Response: $login_response"
+        fi
+
+        attempts=$((attempts + 1))
+        echo "Retrying to fetch token... Attempt $((attempts + 1)) of $max_attempts"
+    done
+
+    # If the maximum attempts are reached without success, exit with an error
+    if [ $success -eq 0 ]; then
+        echo "Error: Exceeded maximum retry attempts for fetching API token."
         exit 1
     fi
-
-    # Store the token in a file
-    echo "$token" > "$token_file"
-    echo "New token saved: $token"
 }
 
 # Function to handle missing valid_until field by refreshing the token
