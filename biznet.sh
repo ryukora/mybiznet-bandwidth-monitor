@@ -1,11 +1,12 @@
 #!/bin/bash
 
-login_url="https://mybiznet.biznetform.com/api/login"
-request_url="https://mybiznet.biznetform.com/api/getQuota?contractNumber=000000xxxxxx"
-bandwidth_url="https://mybiznet.biznetform.com/api/getBandwidth?contractNumber=000000xxxxxx"
-
+biznet_id="000000xxxxxx"
 username="xxxxxxxxxxxxxx"
 password="xxxxxxxxxxxxxx"
+
+login_url="https://mybiznet.biznetform.com/api/login"
+request_url="https://mybiznet.biznetform.com/api/getQuota?contractNumber=$biznet_id"
+bandwidth_url="https://mybiznet.biznetform.com/api/getBandwidth?contractNumber=$biznet_id"
 login_payload=$(printf '{"username":"%s","password":"%s"}' "$username" "$password")
 
 token_file="/tmp/mybiznet_token.txt"
@@ -31,11 +32,19 @@ fetch_new_token() {
         login_response=$(curl -s -X POST "$login_url" -H "Content-Type: application/json" --data "$login_payload")
         echo "Login response: $login_response"
 
+        echo "$login_response" | jq empty > /dev/null 2>&1
+        if [ $? -ne 0 ]; then
+            echo "Error: Invalid JSON response received: $login_response"
+            attempts=$((attempts + 1))
+            echo "Retrying to fetch token... Attempt $((attempts + 1)) of $max_attempts"
+            continue
+        fi
+
         response_code=$(echo "$login_response" | jq -r '.code')
         response_success=$(echo "$login_response" | jq -r '.success')
         token=$(echo "$login_response" | jq -r '.["api-token"]')
 
-        if [ "$response_code" -eq 200 ] && [ "$response_success" == "true" ] && [ -n "$token" ] && [ "$token" != "null" ]; then
+        if [[ "$response_code" =~ ^[0-9]+$ ]] && [ "$response_code" -eq 200 ] && [ "$response_success" == "true" ] && [ -n "$token" ] && [ "$token" != "null" ]; then
             echo "$token" > "$token_file"
             echo "New token saved: $token"
             success=1
@@ -86,6 +95,7 @@ fetch_quota_data() {
 
         attempts=$((attempts + 1))
         echo "Retrying... Attempt $attempts of $max_attempts"
+        echo "Quota data successfully written to $quota_file"
     done
 
     if [ $success -eq 0 ]; then
