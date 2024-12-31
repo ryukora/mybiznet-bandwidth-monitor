@@ -10,19 +10,13 @@ This project facilitates monitoring bandwidth usage from the MyBiznet applicatio
 ## Setup Overview
 
 - Data Scraping with Shell Script
-
-A shell script (biznet.sh) is employed to extract bandwidth data from the MyBiznet application.
-This script can be scheduled to run at regular intervals using cron, ensuring continuous data collection.
+  > A shell script (biznet.sh) is employed to extract bandwidth data from the MyBiznet application. This script can be scheduled to run at regular intervals using cron, ensuring continuous data collection.
 
 - Prometheus Integration
-
-Prometheus is configured to scrape the data collected by the shell script.
-The scraped metrics are stored in Prometheus's time-series database, making them available for querying and analysis.
+  > Prometheus is configured to scrape the data collected by the shell script. The scraped metrics are stored in Prometheus's time-series database, making them available for querying and analysis.
 
 - Grafana Dashboard
-
-A pre-built Grafana dashboard template (Biznet-Home-Quota.json) is provided for visualizing the bandwidth data.
-Users can import this template into their Grafana instance to gain immediate access to visual representations of their bandwidth usage.
+  > A pre-built Grafana dashboard template (Biznet-Home-Quota.json) is provided for visualizing the bandwidth data. Users can import this template into their Grafana instance to gain immediate access to visual representations of their bandwidth usage.
 
 # Tutorials
 
