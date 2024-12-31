@@ -11,20 +11,13 @@ Integrasi itu membolehkan pengguna menggambarkan penggunaan bandwidth melalui da
 ## Gambaran Keseluruhan Persediaan
 
 - Mengscrape Data dengan Script Shell
-
-Script shell (biznet.sh) digunakan untuk mengekstrak data bandwidth dari aplikasi MyBiznet.
-Script ini boleh dijadualkan untuk dijalankan pada selang masa yang tetap menggunakan cron, memastikan pengumpulan data berterusan.
-
+  > Script shell (biznet.sh) digunakan untuk mengekstrak data bandwidth dari aplikasi MyBiznet. Script ini boleh dijadualkan untuk dijalankan pada selang masa yang tetap menggunakan cron, memastikan pengumpulan data berterusan.
 
 - Integrasi Prometheus
-
-Prometheus dikonfigurasikan untuk mengscrape data yang dikumpul oleh script shell.
-Metric yang discrape disimpan dalam pangkalan database masa Prometheus, menjadikannya tersedia untuk pertanyaan dan analisis.
+  > Prometheus dikonfigurasikan untuk mengscrape data yang dikumpul oleh script shell. Metric yang discrape disimpan dalam pangkalan database masa Prometheus, menjadikannya tersedia untuk pertanyaan dan analisis.
 
 - Dashboard Grafana
-
-Template Grafana yang siap pakai (Biznet-Home-Quota.json) disediakan untuk menggambarkan data bandwidth.
-Pengguna boleh mengimport template ini ke dalam contoh Grafana mereka untuk mendapatkan akses segera kepada representasikan visual penggunaan bandwidth mereka.
+  > Template Grafana yang siap pakai (Biznet-Home-Quota.json) disediakan untuk menggambarkan data bandwidth. Pengguna boleh mengimport template ini ke dalam contoh Grafana mereka untuk mendapatkan akses segera kepada representasikan visual penggunaan bandwidth mereka.
 
 # Tutorial
 
