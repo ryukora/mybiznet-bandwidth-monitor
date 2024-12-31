@@ -1,5 +1,7 @@
 # MyBiznet Bandwidth Prometheus
-Scraping data from app MyBiznet (app.biznet.id) to Prometheus -> Grafana
+Scraping data from app MyBiznet (app.biznet.id) to Prometheus -> Grafana.
+
+This project facilitates monitoring bandwidth usage from the MyBiznet application (app.biznet.id) by integrating it with Prometheus and Grafana. The integration enables users to visualize their bandwidth consumption through Grafana dashboards, providing insights into their internet usage patterns.
 
 ![gZC85XF](https://i.imgur.com/gZC85XF.png)
 
