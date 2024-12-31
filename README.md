@@ -12,7 +12,7 @@ This project facilitates monitoring bandwidth usage from the MyBiznet applicatio
 4. Do ``chmod a+rx (to your file), for example: /root/boot/script``
 5. Open ``crontab -e``
 6. Insert ``@reboot /bin/bash (to your file), example: /root/boot/script``. Save & Apply.
-7. Done
+7. Done.
 
 # Import to Grafana with Template
 1. Download [this template here](https://github.com/ryukora/mybiznet-bandwidth-prometheus/raw/refs/heads/main/Biznet-Home-Quota.json).
@@ -20,5 +20,5 @@ This project facilitates monitoring bandwidth usage from the MyBiznet applicatio
 3. Add New, then Import.
 4. Upload the dashboard JSON file and put anything in your desired folder.
 5. Change UID if necessary.
-6. Then Import
-7. Done
+6. Import.
+7. Done.
