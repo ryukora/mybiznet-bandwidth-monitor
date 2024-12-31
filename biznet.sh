@@ -1,12 +1,13 @@
 #!/bin/bash
 
+mybiznet_api="https://mybiznet.biznetform.com/api"
 biznet_id="000000xxxxxx"
 username="xxxxxxxxxxxxxx"
 password="xxxxxxxxxxxxxx"
 
-login_url="https://mybiznet.biznetform.com/api/login"
-request_url="https://mybiznet.biznetform.com/api/getQuota?contractNumber=$biznet_id"
-bandwidth_url="https://mybiznet.biznetform.com/api/getBandwidth?contractNumber=$biznet_id"
+login_url="$mybiznet_api/login"
+request_url="$mybiznet_api/getQuota?contractNumber=$biznet_id"
+bandwidth_url="$mybiznet_api/getBandwidth?contractNumber=$biznet_id"
 login_payload=$(printf '{"username":"%s","password":"%s"}' "$username" "$password")
 
 token_file="/tmp/mybiznet_token.txt"
@@ -24,7 +25,7 @@ fi
 
 fetch_new_token() {
     attempts=0
-    max_attempts=5
+    max_attempts=10
     success=0
 
     while [ $attempts -lt $max_attempts ]; do
@@ -72,7 +73,7 @@ handle_missing_quota_or_bandwidth_data() {
 fetch_quota_data() {
     token=$(cat "$token_file")
     attempts=0
-    max_attempts=5
+    max_attempts=10
     success=0
 
     while [ $attempts -lt $max_attempts ]; do
