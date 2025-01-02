@@ -8,7 +8,7 @@ Integrasi itu membolehkan pengguna menggambarkan penggunaan bandwidth melalui da
 
 ![gZC85XF](https://i.imgur.com/gZC85XF.png)
 
-## Gambaran Keseluruhan Persediaan
+## Gambaran Overview
 
 - Mengscrape Data dengan Script Shell
   > Script shell (biznet.sh) digunakan untuk mengekstrak data bandwidth dari aplikasi MyBiznet. Script ini boleh dijadualkan untuk dijalankan pada selang masa yang tetap menggunakan cron, memastikan pengumpulan data berterusan.
