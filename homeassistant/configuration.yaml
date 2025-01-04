@@ -1,0 +1,26 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+sensor:
+  - platform: rest
+    resource: http://[to your machine IP]/tmp/quota_response.json
+    name: Biznet
+    scan_interval: 20
+    value_template: 'OK'
+    json_attributes_path: $.mainKuota.mainKuota
+    json_attributes:
+      - remainingLimit
+  - platform: template
+    sensors:
+      biz_remaininglimit:
+        value_template: "{{ ((state_attr('sensor.Biznet', 'remainingLimit') | float) /1000) | round(2)}}"
+        unit_of_measurement: "GB"
