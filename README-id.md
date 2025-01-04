@@ -1,6 +1,6 @@
 [English](https://github.com/ryukora/mybiznet-bandwidth-prometheus) | **Indonesia**
 
-# MyBiznet Bandwidth Prometheus
+# Monitor Bandwidth MyBiznet
 Mengscrape data dari aplikasi MyBiznet (app.biznet.id) ke Prometheus -> Grafana.
 
 Projek ini memudahkan monitor penggunaan bandwidth dari aplikasi MyBiznet (app.biznet.id) dengan mengintegrasikannya dengan Prometheus dan Grafana. 
