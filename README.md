@@ -1,6 +1,6 @@
 **English** | [Indonesia](https://github.com/ryukora/mybiznet-bandwidth-prometheus/blob/main/README-id.md)
 
-# MyBiznet Bandwidth Prometheus
+# MyBiznet Bandwidth Monitor
 Scraping data from app MyBiznet (app.biznet.id) to Prometheus -> Grafana.
 
 This project facilitates monitoring bandwidth usage from the MyBiznet application (app.biznet.id) by integrating it with Prometheus and Grafana. The integration enables users to visualize their bandwidth consumption through Grafana dashboards, providing insights into their internet usage patterns.
